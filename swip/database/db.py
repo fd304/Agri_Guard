@@ -7,10 +7,12 @@ DB_PATH = os.path.join(os.path.dirname(__file__), 'predictions.db')
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
+    # Expanded schema to handle new capabilities
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS predictions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp TEXT,
+            location TEXT,
             temperature REAL,
             rainfall REAL,
             humidity REAL,
@@ -19,6 +21,7 @@ def init_db():
             crop_type TEXT,
             field_size REAL,
             prediction INTEGER,
+            yield_prediction REAL,
             risk_score INTEGER,
             water_required REAL
         )
@@ -32,13 +35,23 @@ def insert_prediction(data):
     timestamp = datetime.now().isoformat()
     cursor.execute('''
         INSERT INTO predictions (
-            timestamp, temperature, rainfall, humidity, soil_moisture, 
-            soil_type, crop_type, field_size, prediction, risk_score, water_required
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            timestamp, location, temperature, rainfall, humidity, soil_moisture, 
+            soil_type, crop_type, field_size, prediction, yield_prediction, risk_score, water_required
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
-        timestamp, data['temperature'], data['rainfall'], data['humidity'],
-        data['soil_moisture'], data['soil_type'], data['crop_type'],
-        data['field_size'], data['prediction'], data['risk_score'], data['water_required']
+        timestamp, 
+        data.get('location', 'Unknown'),
+        data.get('temperature', 0.0), 
+        data.get('rainfall', 0.0), 
+        data.get('humidity', 0.0),
+        data.get('soil_moisture', 0.0), 
+        data.get('soil_type', ''), 
+        data.get('crop_type', ''),
+        data.get('field_size', 0.0), 
+        data.get('prediction', 0), 
+        data.get('yield_prediction', 0.0),
+        data.get('risk_score', 0), 
+        data.get('water_required', 0.0)
     ))
     conn.commit()
     conn.close()
@@ -51,3 +64,4 @@ def get_recent_predictions(limit=100):
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
+

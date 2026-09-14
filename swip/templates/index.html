@@ -4,461 +4,671 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWIP - Smart Water Intelligence Platform</title>
+    <title>SWIP - Smart Water & Irrigation Platform</title>
     <link rel="stylesheet" href="/static/css/style.css">
-    <!-- Inter and Poppins Google Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <!-- Plotly library for charts -->
     <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
+    <div class="bg-layer" id="bg-layer" style="background-image: url('/static/images/pamir_mountain.jpg');"></div>
+    <div class="bg-overlay"></div>
+
     <div class="app-container">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar">
+        <nav class="sidebar glass-panel">
             <div class="brand">
                 <span class="icon">💧</span>
-                <span class="brand-text">SWIP</span>
+                <span class="brand-text">SWIP<br><small data-i18n="nav_subtitle">Smart Water &<br>Irrigation
+                        Platform</small></span>
             </div>
             <ul class="nav-links">
-                <li class="active" data-target="home"><a href="#" data-i18n="nav_home"><i data-lucide="home"
-                            class="nav-icon"></i><span>Home</span></a></li>
-                <li data-target="about"><a href="#" data-i18n="nav_about"><i data-lucide="info"
-                            class="nav-icon"></i><span>About SWIP</span></a></li>
-                <li data-target="features"><a href="#" data-i18n="nav_features"><i data-lucide="sparkles"
-                            class="nav-icon"></i><span>Features</span></a></li>
-                <li data-target="advisor"><a href="#" data-i18n="nav_advisor"><i data-lucide="droplet"
-                            class="nav-icon"></i><span>Irrigation Advisor</span></a></li>
-                <li data-target="water"><a href="#" data-i18n="nav_water"><i data-lucide="waves"
-                            class="nav-icon"></i><span>Water Management</span></a></li>
-                <li data-target="history"><a href="#" data-i18n="nav_history"><i data-lucide="history"
-                            class="nav-icon"></i><span>History</span></a></li>
-                <li data-target="analytics"><a href="#" data-i18n="nav_analytics"><i data-lucide="bar-chart-3"
-                            class="nav-icon"></i><span>Analytics</span></a></li>
-                <li data-target="gallery"><a href="#" data-i18n="nav_gallery"><i data-lucide="image"
-                            class="nav-icon"></i><span>Gallery</span></a></li>
+                <li class="active" data-target="dashboard"><a href="#"><i data-lucide="layout-dashboard"
+                            class="nav-icon"></i><span data-i18n="nav_dashboard">Dashboard</span></a></li>
+                <li data-target="weather"><a href="#"><i data-lucide="cloud-sun" class="nav-icon"></i><span
+                            data-i18n="nav_weather">Weather</span></a></li>
+                <li data-target="predictor"><a href="#"><i data-lucide="cpu" class="nav-icon"></i><span
+                            data-i18n="nav_predictor">Predictor</span></a></li>
+                <li data-target="risk"><a href="#"><i data-lucide="alert-triangle" class="nav-icon"></i><span
+                            data-i18n="nav_risk">Risk Scorer</span></a></li>
+                <li data-target="water"><a href="#"><i data-lucide="droplet" class="nav-icon"></i><span
+                            data-i18n="nav_water">Water Management</span></a></li>
+                <li data-target="field"><a href="#"><i data-lucide="map" class="nav-icon"></i><span
+                            data-i18n="nav_field">Field & Soil</span></a></li>
+                <li data-target="analytics"><a href="#"><i data-lucide="bar-chart-2" class="nav-icon"></i><span
+                            data-i18n="nav_analytics">Analytics</span></a></li>
+                <li data-target="alerts"><a href="#"><i data-lucide="bell" class="nav-icon"></i><span
+                            data-i18n="nav_alerts">Alerts</span></a></li>
+                <li data-target="reports"><a href="#"><i data-lucide="file-text" class="nav-icon"></i><span
+                            data-i18n="nav_reports">Reports</span></a></li>
+                <li data-target="settings"><a href="#"><i data-lucide="settings" class="nav-icon"></i><span
+                            data-i18n="nav_settings">Settings</span></a></li>
+                <li data-target="help"><a href="#"><i data-lucide="help-circle" class="nav-icon"></i><span
+                            data-i18n="nav_help">Help</span></a></li>
             </ul>
-            <div class="language-selector">
-                <select id="lang-select">
-                    <option value="en">English</option>
-                    <option value="ru">Русский</option>
-                    <option value="tg">Тоҷикӣ</option>
-                </select>
-            </div>
         </nav>
 
-        <!-- Main Content -->
-        <main class="content">
-            <!-- Home Section -->
-            <section id="home" class="page-section active bg-image-hero">
-                <div class="hero-overlay"></div>
-                <div class="hero-wrapper">
-                    <h1 class="fade-in" data-i18n="home_title">Smart Water Intelligence Platform</h1>
-                    <p class="fade-in delay-1 subtitle" data-i18n="home_desc">AI-Powered Water Intelligence for
-                        Sustainable Agriculture in Tajikistan</p>
-                    <div class="hero-actions fade-in delay-2">
-                        <button class="btn primary-btn" id="start-analysis-btn" data-i18n="btn_start_analysis">Start
-                            Analysis</button>
-                        <button class="btn outline-btn" id="learn-more-btn" data-i18n="btn_learn_more">Learn
-                            More</button>
+        <div class="main-content-wrapper">
+            <header class="topbar glass-panel">
+                <div class="topbar-left">
+                    <div class="location-selector">
+                        <i data-lucide="map-pin"></i>
+                        <select id="location-select">
+                        </select>
+                    </div>
+                    <div class="sync-status">
+                        <span id="last-updated" data-i18n="last_updated">Last updated: --</span>
+                        <button id="refresh-btn" class="icon-btn"><i data-lucide="refresh-cw"></i></button>
                     </div>
                 </div>
-            </section>
-
-            <!-- About Section -->
-            <section id="about" class="page-section">
-                <div class="section-banner bg-image-hills">
-                    <div class="banner-overlay"></div>
-                    <div class="banner-content">
-                        <h2 data-i18n="about_title" class="section-title">About SWIP</h2>
-                        <p class="section-subtitle" data-i18n="about_desc">Smart Water Intelligence Platform (SWIP) is a
-                            cutting-edge artificial intelligence platform designed to address sustainable water
-                            management, optimize agricultural yields, and monitor the environment in Tajikistan.</p>
+                <div class="topbar-right">
+                    <div class="language-selector">
+                        <select id="lang-select">
+                            <option value="en">EN</option>
+                            <option value="tg">TG</option>
+                            <option value="ru">RU</option>
+                        </select>
+                    </div>
+                    <button class="icon-btn"><i data-lucide="bell"></i></button>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Agri+Guard&background=1B5E20&color=fff" alt="User">
                     </div>
                 </div>
-                <div class="about-layout-wrapper">
-                    <div class="about-card glass-panel fade-in delay-1">
-                        <h3 data-i18n="mission_title" class="sub-header-title">Our Mission</h3>
-                        <p data-i18n="mission_desc" class="mission-text">To empower farmers and communities with
-                            intelligent water management solutions for a sustainable future.</p>
+            </header>
 
-                        <!-- Mini features grid imitating Mockup 2 -->
-                        <div class="features-grid-mini">
-                            <div class="feat-box">
-                                <div class="feat-box-icon"><i data-lucide="droplet"></i></div>
-                                <span class="feat-box-label" data-i18n="feat_smart_irrigation">Smart Irrigation</span>
-                            </div>
-                            <div class="feat-box">
-                                <div class="feat-box-icon"><i data-lucide="cloud-lightning"></i></div>
-                                <span class="feat-box-label" data-i18n="feat_ai_forecasting">AI Forecasting</span>
-                            </div>
-                            <div class="feat-box">
-                                <div class="feat-box-icon"><i data-lucide="alert-triangle"></i></div>
-                                <span class="feat-box-label" data-i18n="feat_risk_detection">Risk Detection</span>
-                            </div>
-                            <div class="feat-box">
-                                <div class="feat-box-icon"><i data-lucide="database"></i></div>
-                                <span class="feat-box-label" data-i18n="feat_water_optimization">Water
-                                    Optimization</span>
+            <main class="content">
+                <section id="dashboard" class="page-section active">
+                    <div class="welcome-header">
+                        <h2 data-i18n="dash_welcome">Welcome back, Agri Guard</h2>
+                        <p data-i18n="dash_desc">Here is the current status of your fields based on live weather data.
+                        </p>
+                    </div>
+
+                    <div class="kpi-grid">
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-header"><i data-lucide="droplets"></i> <span
+                                    data-i18n="kpi_water_need">Water Need Today</span></div>
+                            <div class="kpi-val" id="dash-water-need">-- mm</div>
+                            <div class="kpi-subtext text-warning" data-i18n="kpi_irrigation_req">Irrigation required
                             </div>
                         </div>
-                        <button class="btn primary-btn mt-6" id="about-learn-more-btn" data-i18n="btn_learn_more">Learn
-                            More</button>
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-header"><i data-lucide="leaf"></i> <span data-i18n="kpi_water_stress">Crop
+                                    Water Stress</span></div>
+                            <div class="kpi-val" id="dash-water-stress">--%</div>
+                            <div class="kpi-subtext text-success" id="dash-stress-lvl" data-i18n="kpi_low">Low</div>
+                        </div>
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-header"><i data-lucide="sun"></i> <span data-i18n="kpi_drought_risk">Drought
+                                    Risk</span></div>
+                            <div class="kpi-val" id="dash-drought-risk">--/100</div>
+                            <div class="kpi-subtext text-warning" id="dash-drought-lvl" data-i18n="kpi_mod">Moderate
+                            </div>
+                        </div>
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-header"><i data-lucide="trending-up"></i> <span
+                                    data-i18n="kpi_prediction">Prediction</span></div>
+                            <div class="kpi-val" id="dash-yield">-- ton/ha</div>
+                            <div class="kpi-subtext text-success">↑ 8%</div>
+                        </div>
                     </div>
-                </div>
-            </section>
 
-            <!-- Features Section -->
-            <section id="features" class="page-section">
-                <div class="section-banner bg-image-hills">
-                    <div class="banner-overlay"></div>
-                    <div class="banner-content">
-                        <h2 data-i18n="features_title" class="section-title">Platform Features</h2>
-                    </div>
-                </div>
-                <div class="features-grid">
-                    <div class="feature-card glass-panel fade-in delay-1">
-                        <div class="feat-icon"><i data-lucide="droplet"></i></div>
-                        <h3 data-i18n="feat_prediction_title">AI Irrigation Advisor</h3>
-                        <p data-i18n="feat_prediction_desc">Analyzes soil moisture, humidity, temperature, and crop type
-                            to determine exactly when and how much to irrigate.</p>
-                    </div>
-                    <div class="feature-card glass-panel fade-in delay-1">
-                        <div class="feat-icon"><i data-lucide="alert-triangle"></i></div>
-                        <h3 data-i18n="feat_risk_title">Real-Time Risk Analysis</h3>
-                        <p data-i18n="feat_risk_desc">Monitors climate hazards and calculates risk indicators to prevent
-                            under-watering, crop failure, and soil erosion.</p>
-                    </div>
-                    <div class="feature-card glass-panel fade-in delay-2">
-                        <div class="feat-icon"><i data-lucide="bar-chart-3"></i></div>
-                        <h3 data-i18n="feat_analytics_title">Water Usage Analytics</h3>
-                        <p data-i18n="feat_analytics_desc">Aggregates historical datasets and forecasts trends for
-                            comprehensive water consumption and budgeting.</p>
-                    </div>
-                    <div class="feature-card glass-panel fade-in delay-2">
-                        <div class="feat-icon"><i data-lucide="globe"></i></div>
-                        <h3 data-i18n="feat_tajikistan_title">Regional Focus</h3>
-                        <p data-i18n="feat_tajikistan_desc">Tailored specifically to Tajikistan's river basins,
-                            mountainous terrain, and cotton/wheat agricultural cycles.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Advisor Section -->
-            <section id="advisor" class="page-section">
-                <div class="section-banner bg-image-cotton">
-                    <div class="banner-overlay"></div>
-                    <div class="banner-content">
-                        <h2 data-i18n="advisor_title" class="section-title">Irrigation Advisor</h2>
-                    </div>
-                </div>
-                <div class="advisor-grid">
-                    <!-- Advisor Input Form -->
-                    <div class="form-card glass-panel fade-in delay-1">
-                        <form id="prediction-form">
-                            <div class="form-group">
-                                <label><span data-i18n="lbl_temp">Temperature (°C)</span> <span class="val-badge"
-                                        id="val-temp">25</span></label>
-                                <input type="range" id="temperature" name="temperature" min="0" max="50" value="25"
-                                    oninput="document.getElementById('val-temp').innerText = this.value">
-                            </div>
-                            <div class="form-group">
-                                <label><span data-i18n="lbl_rain">Rainfall (mm)</span> <span class="val-badge"
-                                        id="val-rain">5</span></label>
-                                <input type="range" id="rainfall" name="rainfall" min="0" max="200" value="5"
-                                    oninput="document.getElementById('val-rain').innerText = this.value">
-                            </div>
-                            <div class="form-group">
-                                <label><span data-i18n="lbl_humidity">Humidity (%)</span> <span class="val-badge"
-                                        id="val-humidity">50</span></label>
-                                <input type="range" id="humidity" name="humidity" min="0" max="100" value="50"
-                                    oninput="document.getElementById('val-humidity').innerText = this.value">
-                            </div>
-                            <div class="form-group">
-                                <label><span data-i18n="lbl_soil_moisture">Soil Moisture (%)</span> <span
-                                        class="val-badge" id="val-moisture">30</span></label>
-                                <input type="range" id="soil_moisture" name="soil_moisture" min="0" max="100" value="30"
-                                    oninput="document.getElementById('val-moisture').innerText = this.value">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label data-i18n="lbl_crop">Crop Type</label>
-                                    <select id="crop_type" name="crop_type">
-                                        <option value="Cotton" data-i18n="crop_cotton">Cotton</option>
-                                        <option value="Wheat" data-i18n="crop_wheat">Wheat</option>
-                                        <option value="Tomato" data-i18n="crop_tomato">Tomato</option>
-                                        <option value="Potato" data-i18n="crop_potato">Potato</option>
-                                        <option value="Onion" data-i18n="crop_onion">Onion</option>
-                                        <option value="Cucumber" data-i18n="crop_cucumber">Cucumber</option>
-                                    </select>
+                    <div class="dashboard-grid-2">
+                        <div class="glass-panel">
+                            <h3 data-i18n="dash_live_weather">Live Weather</h3>
+                            <div class="weather-current">
+                                <div class="weather-main">
+                                    <i data-lucide="sun" class="weather-icon-large"></i>
+                                    <span class="weather-temp" id="dash-temp">--°C</span>
                                 </div>
-                                <div class="form-group">
-                                    <label data-i18n="lbl_soil">Soil Type</label>
-                                    <select id="soil_type" name="soil_type">
-                                        <option value="Sandy" data-i18n="soil_sandy">Sandy</option>
-                                        <option value="Loamy" data-i18n="soil_loamy">Loamy</option>
-                                        <option value="Clay" data-i18n="soil_clay">Clay</option>
-                                    </select>
+                                <div class="weather-details-grid">
+                                    <div><i data-lucide="cloud-rain"></i> <span id="dash-rain">-- mm</span></div>
+                                    <div><i data-lucide="droplet"></i> <span id="dash-humidity">--%</span></div>
+                                    <div><i data-lucide="wind"></i> <span id="dash-wind">-- km/h</span></div>
+                                    <div>ET₀ <span id="dash-et0">-- mm/d</span></div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label data-i18n="lbl_field_size">Field Size (Hectares)</label>
-                                <input type="number" id="field_size" name="field_size" step="0.1" value="1.0" min="0.1">
-                            </div>
-                            <button type="submit" class="btn primary-btn w-full" data-i18n="btn_predict">Analyze
-                                Data</button>
-                        </form>
-                    </div>
+                        </div>
 
-                    <!-- Right Column: Results & Crop Insights panel -->
-                    <div class="advisor-results-panel">
-                        <!-- Dynamic Results Card -->
-                        <div class="results-card glass-panel fade-in delay-2 mb-6" id="results-container"
-                            style="display:none; opacity:0;">
-                            <div class="result-header">
-                                <h3 data-i18n="res_recommendation">Recommendation</h3>
-                                <div id="prediction-badge" class="badge">--</div>
-                            </div>
-                            <div class="metrics-grid">
-                                <div class="metric-box">
-                                    <span class="metric-label" data-i18n="res_risk">Risk Score</span>
-                                    <div class="metric-val-wrap">
-                                        <span class="metric-value" id="risk-val">--</span>
-                                        <span class="metric-level" id="risk-level">--</span>
+                        <div class="glass-panel">
+                            <h3 data-i18n="dash_forecast">7-Day Forecast</h3>
+                            <div class="forecast-list" id="dash-forecast"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="weather" class="page-section">
+                    <h2 class="section-title" data-i18n="nav_weather">Weather & Climate</h2>
+                    <div class="glass-panel mb-6">
+                        <div class="system-status">
+                            <span class="status-indicator online"></span> <span data-i18n="status_api_connected">Weather
+                                API Connected</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel">
+                        <h3 data-i18n="ext_forecast">Extended Forecast</h3>
+                        <div class="forecast-horizontal" id="extended-forecast">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+                </section>
+
+                <section id="predictor" class="page-section">
+                    <h2 class="section-title" data-i18n="pred_title">AI Yield & Irrigation Predictor</h2>
+                    <div class="predictor-layout">
+                        <div class="glass-panel">
+                            <h3 data-i18n="pred_live_inputs">Live Weather Inputs</h3>
+                            <div class="auto-fill-notice"><i data-lucide="check-circle"></i> <span
+                                    data-i18n="pred_autofill">Auto-filled from live weather</span></div>
+
+                            <form id="prediction-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label data-i18n="lbl_temp">Temperature (°C)</label>
+                                        <input type="number" id="pred-temp" step="0.1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-i18n="lbl_rain">Rainfall (mm)</label>
+                                        <input type="number" id="pred-rain" step="0.1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-i18n="lbl_hum">Humidity (%)</label>
+                                        <input type="number" id="pred-humidity" step="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-i18n="lbl_soil_moisture">Soil Moisture (%)</label>
+                                        <input type="number" id="pred-soil-moisture" step="0.1" value="30" required>
                                     </div>
                                 </div>
-                                <div class="metric-box">
-                                    <span class="metric-label" data-i18n="res_water">Water Required</span>
-                                    <span class="metric-value" id="water-val">--<span
-                                            style="font-size:14px;font-weight:normal"> L</span></span>
+
+                                <h3 class="mt-6" data-i18n="pred_farm_info">Farm & Crop Information</h3>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label data-i18n="lbl_crop">Crop Type</label>
+                                        <select id="pred-crop">
+                                            <option value="Cotton" data-i18n="opt_cotton">Cotton</option>
+                                            <option value="Wheat" data-i18n="opt_wheat">Wheat</option>
+                                            <option value="Tomato" data-i18n="opt_tomato">Tomato</option>
+                                            <option value="Potato" data-i18n="opt_potato">Potato</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-i18n="lbl_soil">Soil Type</label>
+                                        <select id="pred-soil">
+                                            <option value="Sandy" data-i18n="opt_sandy">Sandy</option>
+                                            <option value="Loamy" data-i18n="opt_loamy">Loamy</option>
+                                            <option value="Clay" data-i18n="opt_clay">Clay</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-i18n="lbl_size">Field Size (ha)</label>
+                                        <input type="number" id="pred-size" step="0.1" value="2.0">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="explanation-box">
-                                <h4 data-i18n="res_reasons">AI Explanation</h4>
-                                <ul id="reasons-list"></ul>
-                            </div>
+
+                                <button type="submit" class="btn primary-btn mt-6 w-full"
+                                    data-i18n="btn_predict">Predict Yield & Irrigation</button>
+                            </form>
                         </div>
 
-                        <!-- Static Crop Insights Panel (Mockup 4 style) -->
-                        <div class="insights-card glass-panel fade-in delay-2">
-                            <h3 class="crop-insights-title" data-i18n="insights_title_panel">Crop Insights</h3>
-                            <h4 class="crop-insights-subtitle" data-i18n="insights_subtitle_panel">Cotton Field Analysis
-                            </h4>
-                            <p class="crop-insights-desc" data-i18n="insights_desc_panel">Monitor crop health, soil
-                                moisture, and yield predictions.</p>
-
-                            <div class="recommended-actions">
-                                <h5 class="actions-header" data-i18n="rec_actions_header">Recommended Actions</h5>
-                                <ul class="actions-list">
-                                    <li data-i18n="act_optimize">Optimize irrigation schedule</li>
-                                    <li data-i18n="act_pest">Monitor regional pest risks</li>
-                                    <li data-i18n="act_soil">Improve soil macronutrients</li>
-                                </ul>
+                        <div class="glass-panel results-panel" id="prediction-result" style="display: none;">
+                            <h3 data-i18n="res_title">Prediction Result</h3>
+                            <div class="result-highlight">
+                                <span class="badge" id="res-badge">--</span>
                             </div>
-                            <button class="btn outline-btn w-full mt-6" data-i18n="btn_view_details">View
-                                Details</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Water Management Section -->
-            <section id="water" class="page-section">
-                <div class="section-banner bg-image-lake">
-                    <div class="banner-overlay"></div>
-                    <div class="banner-content">
-                        <h2 data-i18n="water_title" class="section-title">Water Management Hub</h2>
-                        <p class="section-subtitle" data-i18n="water_desc">Sustainable water management is the key to
-                            Tajikistan's agricultural future. Efficient irrigation is particularly critical for cotton
-                            plantations, which require careful water budgeting to thrive without depleting regional
-                            reservoirs.</p>
-                    </div>
-                </div>
-                <div class="water-grid">
-                    <div class="water-card glass-panel fade-in delay-1">
-                        <h3 data-i18n="reservoir_status_title">Nurek Reservoir & Lake Basin Status</h3>
-                        <div class="reservoir-metrics">
-                            <div class="reservoir-metric">
-                                <span class="res-icon"><i data-lucide="bar-chart-2"></i></span>
-                                <span class="res-text" data-i18n="reservoir_volume">Active Volume: 10.5 Billion
-                                    m³</span>
+                            <div class="res-details">
+                                <p><strong data-i18n="res_risk">Risk Score:</strong> <span id="res-risk">--</span></p>
+                                <p><strong data-i18n="res_water">Water Required:</strong> <span id="res-water">--</span>
+                                    L</p>
                             </div>
-                            <div class="reservoir-metric">
-                                <span class="res-icon"><i data-lucide="arrow-down-left"></i></span>
-                                <span class="res-text" data-i18n="reservoir_inflow">Average Inflow: 640 m³/s</span>
-                            </div>
-                            <div class="reservoir-metric">
-                                <span class="res-icon"><i data-lucide="arrow-up-right"></i></span>
-                                <span class="res-text" data-i18n="reservoir_outflow">Average Outflow: 580 m³/s</span>
+                            <div class="res-reasons mt-6">
+                                <h4 data-i18n="res_reasoning">AI Reasoning</h4>
+                                <ul id="res-reasons-list"></ul>
                             </div>
                         </div>
                     </div>
-                    <div class="water-card glass-panel fade-in delay-2">
-                        <h3 data-i18n="water_saving_tips_title">Irrigation Best Practices</h3>
-                        <ul class="tips-list">
-                            <li data-i18n="tip1">Schedule watering during early morning or late evening hours to
-                                minimize evaporation losses.</li>
-                            <li data-i18n="tip2">Maintain optimal soil moisture levels based on crop-specific AI
-                                predictions to avoid water logging.</li>
-                            <li data-i18n="tip3">In cotton fields, prefer drip irrigation or furrow wetting techniques
-                                to conserve up to 35% more water.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- History Section -->
-            <section id="history" class="page-section bg-subtle-hills">
-                <div class="section-banner bg-image-hills reduced-opacity-banner">
-                    <div class="banner-overlay"></div>
-                    <div class="banner-content">
-                        <h2 data-i18n="history_title" class="section-title">Prediction History</h2>
-                    </div>
-                </div>
-                <div class="table-container glass-panel fade-in delay-1">
-                    <table class="history-table" id="history-table">
-                        <thead>
-                            <tr>
-                                <th data-i18n="th_date">Date</th>
-                                <th data-i18n="th_crop">Crop</th>
-                                <th data-i18n="th_moisture">Moisture</th>
-                                <th data-i18n="th_prediction">Recommendation</th>
-                                <th data-i18n="th_risk">Risk</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Populated via JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Analytics Section -->
-            <section id="analytics" class="page-section">
-                <!-- Dashboard banner imitating Mockup 3 -->
-                <div class="section-banner bg-image-lake dashboard-banner">
-                    <div class="banner-overlay"></div>
-                    <div class="banner-content w-full">
-                        <div class="dash-header-wrap">
-                            <h2 data-i18n="analytics_title" class="section-title">Dashboard</h2>
-                            <span class="dash-date" id="dash-current-date">May 18, 2026</span>
+                <section id="risk" class="page-section">
+                    <h2 class="section-title" data-i18n="nav_risk">Risk Scorer</h2>
+                    <div class="risk-layout">
+                        <div class="glass-panel text-center">
+                            <h3 data-i18n="risk_overall">Overall Risk Score</h3>
+                            <div class="risk-gauge">
+                                <span id="risk-overall-score">--</span>
+                                <small>/ 100</small>
+                            </div>
+                            <div class="risk-level-text" id="risk-overall-level">--</div>
                         </div>
-
-                        <!-- 3-column top metrics row -->
-                        <div class="dash-metrics-row">
-                            <div class="dash-metric-card glass-panel">
-                                <span class="dash-lbl" data-i18n="dash_water_cons">Water Consumption</span>
-                                <div class="dash-val-row">
-                                    <span class="dash-val">1,250 m³</span>
-                                    <span class="dash-trend positive">+12% vs last week</span>
+                        <div class="glass-panel">
+                            <h3 data-i18n="risk_factors">Risk Factors</h3>
+                            <div class="risk-factor-list">
+                                <div class="risk-factor">
+                                    <span data-i18n="risk_drought">Drought Risk</span>
+                                    <div class="progress-bar">
+                                        <div class="fill warning" style="width: 35%"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="dash-metric-card glass-panel">
-                                <span class="dash-lbl" data-i18n="dash_field_health">Field Health</span>
-                                <div class="dash-val-row">
-                                    <span class="dash-val">86%</span>
-                                    <span class="dash-badge success" data-i18n="dash_good">Good</span>
+                                <div class="risk-factor">
+                                    <span data-i18n="risk_heat">Heat Stress</span>
+                                    <div class="progress-bar">
+                                        <div class="fill danger" style="width: 45%"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="dash-metric-card glass-panel">
-                                <span class="dash-lbl" data-i18n="dash_risk_score">Risk Score</span>
-                                <div class="dash-val-row">
-                                    <span class="dash-val">24</span>
-                                    <span class="dash-badge low-risk" data-i18n="dash_low_risk">Low Risk</span>
+                                <div class="risk-factor">
+                                    <span data-i18n="risk_water">Water Stress</span>
+                                    <div class="progress-bar">
+                                        <div class="fill success" style="width: 12%"></div>
+                                    </div>
+                                </div>
+                                <div class="risk-factor">
+                                    <span data-i18n="risk_flood">Flood Risk</span>
+                                    <div class="progress-bar">
+                                        <div class="fill success" style="width: 10%"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <!-- Lower metrics and Plotly charts -->
-                <div class="analytics-layout-wrapper">
-                    <div class="confidence-card glass-panel fade-in mb-6">
-                        <div class="confidence-header">
-                            <span class="lbl" data-i18n="dash_pred_confidence">Prediction Confidence</span>
-                            <span class="val">92%</span>
-                        </div>
-                        <div class="confidence-bar-outer">
-                            <div class="confidence-bar-inner" style="width: 92%;"></div>
-                        </div>
-                        <span class="confidence-badge" data-i18n="dash_high">High</span>
-                    </div>
-
-                    <div class="dashboard-grid">
-                        <div class="chart-card glass-panel fade-in delay-1">
-                            <h3 data-i18n="chart_risk_trend">Risk Score Trend</h3>
-                            <div id="chart-risk" class="chart-container"></div>
-                        </div>
-                        <div class="chart-card glass-panel fade-in delay-1">
-                            <h3 data-i18n="chart_crop_dist">Crop Distribution</h3>
-                            <div id="chart-crops" class="chart-container"></div>
-                        </div>
-                        <div class="chart-card glass-panel full-width fade-in delay-2">
-                            <h3 data-i18n="chart_water_usage">Estimated Water Required Over Time</h3>
-                            <div id="chart-water" class="chart-container"></div>
+                <section id="water" class="page-section">
+                    <h2 class="section-title" data-i18n="water_title">Water Management & Irrigation Planner</h2>
+                    <div class="glass-panel mb-6">
+                        <h3 data-i18n="water_rec">Recommended Irrigation — Next 7 Days</h3>
+                        <div class="water-summary">
+                            <div>
+                                <small data-i18n="water_total">Total Water Need</small>
+                                <strong>75 mm</strong>
+                            </div>
+                            <div>
+                                <small data-i18n="water_avg">Average Per Day</small>
+                                <strong>10.7 mm</strong>
+                            </div>
+                            <div>
+                                <small data-i18n="water_forecast">Forecast Rainfall</small>
+                                <strong id="water-forecast-rain">-- mm</strong>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                    <div class="glass-panel">
+                        <div id="irrigation-chart" style="width:100%; height:300px;"></div>
+                    </div>
+                </section>
 
-            <!-- Gallery Section -->
-            <section id="gallery" class="page-section">
-                <div class="gallery-header-container">
-                    <h2 class="gallery-heading" data-i18n="gallery_title">Tajikistan Landscapes</h2>
-                </div>
-
-                <div class="gallery-grid">
-                    <!-- Photo 1 Thumbnail -->
-                    <div class="gallery-item glass-panel fade-in delay-1">
-                        <div class="gallery-img-wrapper">
-                            <img src="/static/images/pamir_mountain.jpg" alt="Pamir Valley Tajikistan">
+                <section id="analytics" class="page-section">
+                    <h2 class="section-title" data-i18n="nav_analytics">History & Analytics</h2>
+                    <div class="glass-panel mb-6">
+                        <h3 data-i18n="hist_title">Prediction History</h3>
+                        <div class="table-container">
+                            <table class="data-table" id="history-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="th_date">Date</th>
+                                        <th data-i18n="th_crop">Crop</th>
+                                        <th data-i18n="th_moisture">Moisture</th>
+                                        <th data-i18n="th_rec">Recommendation</th>
+                                        <th data-i18n="th_risk">Risk</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="gallery-item-footer">
-                            <h4 data-i18n="photo1_title">1. Pamir Valley</h4>
-                            <span class="gallery-tag" data-i18n="tag_hero">Hero Background</span>
+                    </div>
+                </section>
+
+                <section id="field" class="page-section">
+                    <h2 class="section-title" data-i18n="nav_field">Field & Soil Data</h2>
+                    <div class="glass-panel">
+                        <h3 data-i18n="field_info">Field Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group"><label data-i18n="field_id">Field ID</label>
+                                <p>FLD-2026-001</p>
+                            </div>
+                            <div class="form-group"><label data-i18n="field_area">Area</label>
+                                <p>2.0 ha</p>
+                            </div>
+                            <div class="form-group"><label data-i18n="field_crop">Crop</label>
+                                <p data-i18n="opt_cotton">Cotton</p>
+                            </div>
+                            <div class="form-group"><label data-i18n="field_soil">Soil Type</label>
+                                <p data-i18n="opt_loamy">Loamy</p>
+                            </div>
+                            <div class="form-group"><label data-i18n="field_stage">Growth Stage</label>
+                                <p data-i18n="field_veg">Vegetative</p>
+                            </div>
+                            <div class="form-group"><label data-i18n="field_moisture">Latest Soil Moisture</label>
+                                <p>23%</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="alerts" class="page-section">
+                    <h2 class="section-title" data-i18n="nav_alerts">System Alerts</h2>
+                    <div class="glass-panel">
+                        <div class="alert-item warning">
+                            <i data-lucide="thermometer"></i>
+                            <div>
+                                <strong data-i18n="alert_heat_title">High temperature expected</strong>
+                                <p data-i18n="alert_heat_desc">Monitor crop water requirements carefully over the next
+                                    48 hours.</p>
+                            </div>
+                        </div>
+                        <div class="alert-item info mt-4">
+                            <i data-lucide="cloud-rain"></i>
+                            <div>
+                                <strong data-i18n="alert_rain_title">Low rainfall expected</strong>
+                                <p data-i18n="alert_rain_desc">Consider adjusting irrigation planning.</p>
+                            </div>
+                        </div>
+                        <div class="alert-item success mt-4">
+                            <i data-lucide="check-circle"></i>
+                            <div>
+                                <strong data-i18n="alert_sys_title">System operating normally</strong>
+                                <p data-i18n="alert_sys_desc">All sensors and data streams are active.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="reports" class="page-section">
+                    <h2 class="section-title" data-i18n="nav_reports">Reports</h2>
+
+                    <!-- Summary Stats -->
+                    <div class="kpi-grid mb-6">
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-header"><i data-lucide="file-text"></i> <span data-i18n="rep_total">Total
+                                    Reports</span></div>
+                            <div class="kpi-val">12</div>
+                            <div class="kpi-subtext text-success" data-i18n="rep_this_month">This month</div>
+                        </div>
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-header"><i data-lucide="droplets"></i> <span
+                                    data-i18n="rep_water_saved">Water Saved</span></div>
+                            <div class="kpi-val">3,240 L</div>
+                            <div class="kpi-subtext text-success" data-i18n="rep_vs_manual">vs manual irrigation</div>
+                        </div>
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-header"><i data-lucide="cpu"></i> <span
+                                    data-i18n="rep_predictions_made">Predictions Made</span></div>
+                            <div class="kpi-val" id="rep-pred-count">--</div>
+                            <div class="kpi-subtext text-success" data-i18n="rep_all_time">All time</div>
                         </div>
                     </div>
 
-                    <!-- Photo 2 Thumbnail -->
-                    <div class="gallery-item glass-panel fade-in delay-1">
-                        <div class="gallery-img-wrapper">
-                            <img src="/static/images/agricultural_hills.jpg" alt="Green Hills Tajikistan">
+                    <!-- Report Generator -->
+                    <div class="glass-panel mb-6">
+                        <h3 data-i18n="rep_generate">Generate Report</h3>
+                        <p data-i18n="rep_desc" style="color: var(--text-secondary); margin-bottom: 1.5rem;">Download
+                            comprehensive insights on water usage, crop yield, and historical weather patterns for
+                            auditing and compliance.</p>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label data-i18n="rep_type">Report Type</label>
+                                <select id="report-type-select">
+                                    <option value="water" data-i18n="rep_opt_water">Water Consumption Report</option>
+                                    <option value="yield" data-i18n="rep_opt_yield">Yield Prediction Summary</option>
+                                    <option value="risk" data-i18n="rep_opt_risk">Risk & Climate Audit</option>
+                                    <option value="irrigation" data-i18n="rep_opt_irr">Irrigation History</option>
+                                    <option value="full" data-i18n="rep_opt_full">Full Platform Report</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="rep_period">Period</label>
+                                <select id="report-period-select">
+                                    <option value="7" data-i18n="rep_opt_last_week">Last 7 Days</option>
+                                    <option value="30" data-i18n="rep_opt_last_month">Last 30 Days</option>
+                                    <option value="90" data-i18n="rep_opt_quarter">Last Quarter</option>
+                                    <option value="season" data-i18n="rep_opt_season">Current Season</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="rep_format">Format</label>
+                                <select>
+                                    <option>CSV</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="gallery-item-footer">
-                            <h4 data-i18n="photo2_title">2. Green Hills</h4>
-                            <span class="gallery-tag" data-i18n="tag_about">About & Features</span>
+                        <button class="btn primary-btn mt-6" id="report-download-btn"><i data-lucide="download"
+                                style="vertical-align: bottom; width: 18px; margin-right: 6px;"></i> <span
+                                data-i18n="rep_btn_dl">Download Report</span></button>
+                    </div>
+
+                    <!-- Recent Reports -->
+                    <div class="glass-panel">
+                        <h3 data-i18n="rep_recent">Recent Reports</h3>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="th_date">Date</th>
+                                        <th data-i18n="rep_type">Report Type</th>
+                                        <th data-i18n="rep_period">Period</th>
+                                        <th data-i18n="rep_status">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2026-09-05</td>
+                                        <td data-i18n="rep_opt_water">Water Consumption Report</td>
+                                        <td data-i18n="rep_opt_last_week">Last 7 Days</td>
+                                        <td><span class="badge irrigate" style="padding: 4px 10px; font-size: 11px;"
+                                                data-i18n="rep_ready">Ready</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2026-09-01</td>
+                                        <td data-i18n="rep_opt_risk">Risk & Climate Audit</td>
+                                        <td data-i18n="rep_opt_last_month">Last 30 Days</td>
+                                        <td><span class="badge irrigate" style="padding: 4px 10px; font-size: 11px;"
+                                                data-i18n="rep_ready">Ready</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="settings" class="page-section">
+                    <h2 class="section-title" data-i18n="nav_settings">Settings</h2>
+
+                    <!-- General Settings -->
+                    <div class="glass-panel mb-6">
+                        <h3 data-i18n="set_general">General Settings</h3>
+                        <div class="form-grid mt-6">
+                            <div class="form-group">
+                                <label data-i18n="set_default_loc">Default Location</label>
+                                <select id="settings-default-loc">
+                                    <!-- Populated from locations API -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="set_refresh">Data Refresh Interval</label>
+                                <select>
+                                    <option data-i18n="set_5min">Every 5 Minutes</option>
+                                    <option data-i18n="set_15min">Every 15 Minutes</option>
+                                    <option selected data-i18n="set_30min">Every 30 Minutes</option>
+                                    <option data-i18n="set_1hr">Every Hour</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="set_units">Measurement Units</label>
+                                <select>
+                                    <option data-i18n="set_metric">Metric (Celsius, mm, Hectares)</option>
+                                    <option data-i18n="set_imperial">Imperial (Fahrenheit, inches, Acres)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="set_lang">Interface Language</label>
+                                <select id="settings-lang-select">
+                                    <option value="en">English</option>
+                                    <option value="tg">Тоҷикӣ</option>
+                                    <option value="ru">Русский</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Photo 3 Thumbnail -->
-                    <div class="gallery-item glass-panel fade-in delay-2">
-                        <div class="gallery-img-wrapper">
-                            <img src="/static/images/reservoir_lake.jpg" alt="Reservoir Lake Tajikistan">
-                        </div>
-                        <div class="gallery-item-footer">
-                            <h4 data-i18n="photo3_title">3. Reservoir / Lake</h4>
-                            <span class="gallery-tag" data-i18n="tag_dashboard">Dashboard Banner</span>
+                    <!-- Notifications -->
+                    <div class="glass-panel mb-6">
+                        <h3 data-i18n="set_notif_settings">Notification Settings</h3>
+                        <div class="form-grid mt-6">
+                            <div class="form-group">
+                                <label data-i18n="set_notif">Alert Level</label>
+                                <select>
+                                    <option data-i18n="set_all">All Alerts</option>
+                                    <option data-i18n="set_critical">Critical Only</option>
+                                    <option data-i18n="set_none">None</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="set_drought_thresh">Drought Risk Threshold</label>
+                                <select>
+                                    <option>30 / 100</option>
+                                    <option selected>50 / 100</option>
+                                    <option>70 / 100</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Photo 4 Thumbnail -->
-                    <div class="gallery-item glass-panel fade-in delay-2">
-                        <div class="gallery-img-wrapper">
-                            <img src="/static/images/cotton_plantation.jpg" alt="Cotton Field Tajikistan">
+                    <!-- Data & API -->
+                    <div class="glass-panel mb-6">
+                        <h3 data-i18n="set_data">Data & API</h3>
+                        <div class="form-grid mt-6">
+                            <div class="form-group">
+                                <label data-i18n="set_api_key">Custom API Key (Optional)</label>
+                                <input type="password" placeholder="••••••••••••••••">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="set_cache">Cache Duration (min)</label>
+                                <input type="number" value="30" min="5" max="120">
+                            </div>
                         </div>
-                        <div class="gallery-item-footer">
-                            <h4 data-i18n="photo4_title">4. Cotton Field</h4>
-                            <span class="gallery-tag" data-i18n="tag_advisor">Advisor & Insights</span>
+                        <div class="alert-item info mt-6">
+                            <i data-lucide="info"></i>
+                            <div>
+                                <strong data-i18n="set_data_note_title">Data Storage</strong>
+                                <p data-i18n="set_data_note">Prediction history and weather caches are stored locally in
+                                    the SQLite database. No data is sent to third-party analytics services.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </main>
+
+                    <button class="btn primary-btn" data-i18n="set_save">Save Preferences</button>
+                </section>
+
+                <section id="help" class="page-section">
+                    <h2 class="section-title" data-i18n="nav_help">Help & Documentation</h2>
+
+                    <!-- Platform Overview -->
+                    <div class="glass-panel mb-6">
+                        <h3 data-i18n="help_about_platform">About SWIP</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8;" data-i18n="help_about_text">SWIP
+                            (Smart Water & Irrigation Platform) is an AI-powered agricultural decision support system
+                            designed specifically for Tajikistan. It combines real-time weather data from Open-Meteo
+                            with machine learning models to provide irrigation recommendations, risk assessments, and
+                            water management insights. The platform supports Cotton, Wheat, Tomato, and Potato crops
+                            across all regions including Dushanbe, Sughd, Khatlon, Badakhshan, and the Districts of
+                            Republican Subordination.</p>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div class="glass-panel mb-6">
+                        <h3 data-i18n="help_faq">Frequently Asked Questions</h3>
+
+                        <div class="alert-item info mt-4">
+                            <i data-lucide="help-circle"></i>
+                            <div>
+                                <strong data-i18n="help_q1">How is the Irrigation Recommendation calculated?</strong>
+                                <p data-i18n="help_a1">It uses the difference between Evapotranspiration (ET₀) and
+                                    Rainfall, scaled by your field size and crop-specific water coefficients. The ML
+                                    model also factors in temperature, humidity, and soil moisture.</p>
+                            </div>
+                        </div>
+
+                        <div class="alert-item info mt-4">
+                            <i data-lucide="help-circle"></i>
+                            <div>
+                                <strong data-i18n="help_q2">Where does the weather data come from?</strong>
+                                <p data-i18n="help_a2">Weather data is fetched in real-time from the Open-Meteo API,
+                                    which provides free, non-commercial access to global weather forecasts. Coordinates
+                                    are pre-configured for all major Tajik regions.</p>
+                            </div>
+                        </div>
+
+                        <div class="alert-item info mt-4">
+                            <i data-lucide="help-circle"></i>
+                            <div>
+                                <strong data-i18n="help_q3">What does the Risk Score mean?</strong>
+                                <p data-i18n="help_a3">The Risk Score (0–100) combines drought risk (based on rainfall),
+                                    heat stress (based on temperature), and water stress (based on soil moisture). A
+                                    score below 30 is Low, 30–70 is Moderate, and above 70 is High risk.</p>
+                            </div>
+                        </div>
+
+                        <div class="alert-item info mt-4">
+                            <i data-lucide="help-circle"></i>
+                            <div>
+                                <strong data-i18n="help_q4">Can I add a new location?</strong>
+                                <p data-i18n="help_a4">Currently locations are pre-configured by the system
+                                    administrator. Contact the platform team to request additional locations with their
+                                    GPS coordinates.</p>
+                            </div>
+                        </div>
+
+                        <div class="alert-item info mt-4">
+                            <i data-lucide="help-circle"></i>
+                            <div>
+                                <strong data-i18n="help_q5">What is ET₀ (Evapotranspiration)?</strong>
+                                <p data-i18n="help_a5">ET₀ measures how much water evaporates from soil and transpires
+                                    from plants per day (mm/day). It is calculated using the FAO Penman-Monteith method
+                                    and is a key input for irrigation planning.</p>
+                            </div>
+                        </div>
+
+                        <div class="alert-item info mt-4">
+                            <i data-lucide="help-circle"></i>
+                            <div>
+                                <strong data-i18n="help_q6">How often is the weather data refreshed?</strong>
+                                <p data-i18n="help_a6">Weather data is cached for 30 minutes by default. You can
+                                    manually refresh using the ↻ button in the top bar, or change the refresh interval
+                                    in Settings.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="glass-panel">
+                        <h3 data-i18n="help_support">Contact & Support</h3>
+                        <div class="form-grid mt-6">
+                            <div class="alert-item info">
+                                <i data-lucide="mail"></i>
+                                <div>
+                                    <strong data-i18n="help_email">Email Support</strong>
+                                    <p>support@swip.tj</p>
+                                </div>
+                            </div>
+                            <div class="alert-item info">
+                                <i data-lucide="phone"></i>
+                                <div>
+                                    <strong data-i18n="help_phone">Phone</strong>
+                                    <p>+992 (37) 221-00-00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="color: var(--text-secondary); margin-top: 1.5rem; font-size: 0.85rem;"
+                            data-i18n="help_version">SWIP v2.0 — Smart Water & Irrigation Platform for Tajikistan</p>
+                    </div>
+                </section>
+            </main>
+        </div>
     </div>
+
     <script src="/static/js/app.js"></script>
     <script src="/static/js/charts.js"></script>
 </body>
