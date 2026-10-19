@@ -1,27 +1,122 @@
 {
+  "schema_version": "1.0",
+  "model_version": "2.1-synthetic-demo",
+  "training_date": "2026-10-19T10:09:43.041208+00:00",
+  "runtime": {
+    "python": "3.11.15",
+    "scikit_learn": "1.7.2",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "joblib": "1.5.3"
+  },
+  "features": [
+    "Temperature",
+    "Rainfall",
+    "Humidity",
+    "Soil_Moisture",
+    "Field_Size",
+    "Crop_Type",
+    "Soil_Type",
+    "Growth_Stage"
+  ],
+  "artifacts": {
+    "irrigation": {
+      "filename": "irrigation_model_pipeline.pkl",
+      "sha256": "457c6c3a296f128575b0f1e41f9b71748c88f709609c35cf64084eb5ba591f8d"
+    },
+    "yield": {
+      "filename": "yield_model_pipeline.pkl",
+      "sha256": "60b60a3ae3ef3f30aa3fa528df203a97ae06ac0966d653f9478d4d569271643c"
+    }
+  },
+  "dataset": {
+    "name": "SWIP synthetic demonstration dataset",
+    "version": "generator-seed-42",
+    "rows": 2000,
+    "sha256": "370c21b6349f96dbc45b81f89a790c9ef34e94eeee28549e4db9ead174b3b941",
+    "static": true,
+    "inputs": "Synthetic random samples, not observed weather or farm records",
+    "soil_moisture": "Synthetic random percentage, not a measured soil-water profile",
+    "targets": {
+      "irrigation": "Rules in data/dataset_generator.py",
+      "yield": "Crop-specific heuristic with seeded Gaussian noise"
+    },
+    "observed_farm_outcomes_available": false,
+    "sources": [
+      {
+        "name": "SWIP dataset_generator.py",
+        "kind": "synthetic_generator"
+      }
+    ]
+  },
+  "evaluation": {
+    "kind": "generated-target holdout, not field validation",
+    "split": {
+      "random_state": 42,
+      "test_fraction": 0.2,
+      "stratify": "Irrigate",
+      "train_samples": 1600,
+      "test_samples": 400,
+      "test_indices_sha256": "6b3f1aafed3cb769bc60222f31980dbf792398bc66002aed8257627574b643a8"
+    },
+    "preprocessing": "Independent preprocessors fit only on training rows",
+    "duplicate_feature_rows": 0,
+    "metrics": {
+      "irrigation_classification": {
+        "accuracy": 0.98,
+        "precision": 0.9841269841269841,
+        "recall": 0.9738219895287958,
+        "f1": 0.9789473684210527,
+        "roc_auc": 0.9989478694356071
+      },
+      "yield_regression": {
+        "mae_t_ha": 1.5816118771084273,
+        "rmse_t_ha": 2.581188249135274,
+        "r2": 0.9581022323054373
+      }
+    },
+    "baselines_same_split": {
+      "irrigation_most_frequent": {
+        "accuracy": 0.5225,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "roc_auc": 0.5
+      },
+      "yield_training_mean": {
+        "mae_t_ha": 10.5834450625,
+        "rmse_t_ha": 12.615398146401349,
+        "r2": -0.0008141775195880108
+      }
+    },
+    "limitations": "Scores measure reproduction of generated targets, not accuracy on Tajikistan farms."
+  },
+  "uncertainty": "Yield range is 10th–90th percentile of tree predictions, not a calibrated interval.",
+  "superseded_metadata": {
     "training_date": "2026-09-11T19:03:30.001458",
     "model_version": "2.0",
     "features": [
-        "Temperature",
-        "Rainfall",
-        "Humidity",
-        "Soil_Moisture",
-        "Field_Size",
-        "Crop_Type",
-        "Soil_Type",
-        "Growth_Stage"
+      "Temperature",
+      "Rainfall",
+      "Humidity",
+      "Soil_Moisture",
+      "Field_Size",
+      "Crop_Type",
+      "Soil_Type",
+      "Growth_Stage"
     ],
     "metrics": {
-        "irrigation_classification": {
-            "accuracy": 0.9925,
-            "precision": 0.9942857142857143,
-            "recall": 0.9886363636363636,
-            "f1": 0.9914529914529915
-        },
-        "yield_regression": {
-            "mae": 1.7659102795505779,
-            "rmse": 2.669150914064219,
-            "r2": 0.95400701051248
-        }
+      "irrigation_classification": {
+        "accuracy": 0.9925,
+        "precision": 0.9942857142857143,
+        "recall": 0.9886363636363636,
+        "f1": 0.9914529914529915
+      },
+      "yield_regression": {
+        "mae": 1.7659102795505779,
+        "rmse": 2.669150914064219,
+        "r2": 0.95400701051248
+      }
     }
+  }
 }

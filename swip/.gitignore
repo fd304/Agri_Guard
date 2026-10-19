@@ -15,6 +15,17 @@ database/*.db
 
 # Models
 models/*.pkl
+!models/irrigation_model_pipeline.pkl
+!models/yield_model_pipeline.pkl
+
+.pytest_cache/
+.ruff_cache/
+*.db-wal
+*.db-shm
+*.db-journal
+runtime/
+artifacts/
+requirements.lock.tmp
 
 # OS files
 .DS_Store

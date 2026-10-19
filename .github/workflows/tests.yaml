@@ -1,0 +1,31 @@
+name: SWIP regression checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: swip
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.15'
+          cache: pip
+          cache-dependency-path: |
+            swip/requirements.lock
+            swip/requirements-dev.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.19.0'
+      - run: python -m pip install -r requirements.lock -r requirements-dev.txt
+      - run: python -m pip check
+      - run: python -m pytest -q
+      - run: python -m ruff check main.py services models/train.py database/db.py tests
+      - run: python -m compileall -q main.py services models database tests
+      - run: node --check static/js/app.js && node --check static/js/charts.js && node --check static/js/preferences.js
+      - run: node --test tests/preferences.test.cjs

@@ -1,0 +1,11 @@
+services:
+  swip:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - swip_history:/data
+    restart: unless-stopped
+
+volumes:
+  swip_history:

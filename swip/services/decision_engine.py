@@ -19,7 +19,7 @@ class DecisionEngine:
         rain = request_data.rainfall
         humidity = request_data.humidity
         
-        et0 = feature_engineering.calculate_et0(temp, humidity)
+        et0 = request_data.et0_mm if request_data.et0_mm is not None else feature_engineering.calculate_et0(temp, humidity)
         
         # 2. Soil Moisture Processing
         soil_data = soil_service.process_soil_moisture(
@@ -57,26 +57,42 @@ class DecisionEngine:
         # 7. Merge Irrigation Recommendation
         # We combine ML recommendation with agronomic water requirement.
         # If ML says Irrigate AND agronomic need > 0, we irrigate.
-        is_recommended = irrigation_prediction["recommended"] and water_req["amount_mm"] > 0
+        override = 'waterlogging' if soil_moisture > 80 else 'heavy_rain' if rain > 30 else None
+        is_recommended = bool(not override and irrigation_prediction["recommended"] and water_req["amount_mm"] > 0)
+        reasons = ([override] if override else
+                   ['model_and_water_deficit'] if is_recommended else
+                   ['no_water_deficit'] if water_req['amount_mm'] == 0 else ['model_does_not_recommend'])
 
         # 8. Explainability
         explanations = generate_explanation(
-            is_recommended, irrigation_prediction["probability"], risk, water_req, request_data.language
+            is_recommended, irrigation_prediction["probability"], risk, water_req, request_data.language,
+            raw_recommended=irrigation_prediction['recommended'], override=override
         )
 
         return {
+            'decision': {'state': 'IRRIGATE' if is_recommended else 'DO_NOT_IRRIGATE',
+                         'reasons': reasons, 'safety_override': override,
+                         'policy': 'Demonstration rules; confirm conditions before field use'},
+            'model_irrigation': irrigation_prediction,
+            'model_version': ml_engine.model_version,
+            'water_balance': water_req,
+            'plan': water_calculator.seven_day_plan(current_weather['forecast'], soil_moisture,
+                        request_data.field_size, request_data.crop_type, growth_stage)
+                    if current_weather else {'status': 'unavailable', 'days': [],
+                        'meaning': 'No validated live forecast available; no seven-day values generated.'},
             "irrigation": {
                 "recommended": is_recommended,
                 "probability_percent": irrigation_prediction["probability"],
-                "amount_mm": water_req["amount_mm"],
-                "water_liters": water_req["water_liters"],
-                "priority": water_req["priority"]
+                "amount_mm": water_req["amount_mm"] if is_recommended else 0,
+                "water_liters": water_req["water_liters"] if is_recommended else 0,
+                "priority": water_req["priority"] if is_recommended else 'LOW'
             },
             "yield": yield_prediction,
             "risk": risk,
             "weather_features": {
                 "et0_mm": et0,
-                "water_deficit_mm": feature_engineering.calculate_water_deficit(et0, rain, soil_moisture)
+                "et0_source": 'User-supplied daily reference ET0' if request_data.et0_mm is not None else 'Uncalibrated temperature/humidity heuristic',
+                "water_deficit_mm": water_req['amount_mm']
             },
             "soil_status": {
                 "moisture_percent": soil_moisture,
