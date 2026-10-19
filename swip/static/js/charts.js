@@ -1,90 +1,36 @@
-// SWIP Charts logic
-// Exposes window.updateIrrigationChart to be called when weather data is loaded
-
-window.updateIrrigationChart = function(weatherData) {
-    const chartDiv = document.getElementById('irrigation-chart');
-    if (!chartDiv || !weatherData || !weatherData.forecast || weatherData.forecast.length === 0) return;
-
-    // Use Plotly to draw a bar chart of recommended irrigation
-    // Recommended irrigation can be approximated as ET0 - Rainfall, bounded by 0
-    
-    const dates = [];
-    const recommendedIrrigation = [];
-    const rainfall = [];
-    const et0 = [];
-
-    weatherData.forecast.forEach(day => {
-        const d = new Date(day.date).toLocaleDateString([], {weekday: 'short'});
-        dates.push(d);
-        
-        const r = day.precipitation || 0;
-        const e = day.et0 || 5.0;
-        
-        rainfall.push(r);
-        et0.push(e);
-        
-        // Simple logic for irrigation recommendation:
-        // if ET0 > Rainfall, we need to irrigate the difference
-        const need = Math.max(0, e - r);
-        recommendedIrrigation.push(Number(need.toFixed(1)));
+// Accessible bars and table use the authoritative forecast water-balance response only.
+window.updateIrrigationChart = function(plan) {
+    const container = document.getElementById('irrigation-chart');
+    if (!container) return;
+    container.replaceChildren();
+    if (plan?.status !== 'available' || !plan.days?.length) {
+        container.textContent = 'No validated seven-day scenario available. Run analysis with an available forecast; no values are generated offline.';
+        return;
+    }
+    const table = document.createElement('table');
+    table.className = 'data-table';
+    const caption = document.createElement('caption');
+    caption.textContent = 'Forecast water-balance scenario, not scheduled irrigation. Dates: Asia/Dushanbe.';
+    table.appendChild(caption);
+    const head = table.createTHead().insertRow();
+    ['Date', 'Forecast rain (mm)', 'Net deficit (mm)', 'Gross water (L)'].forEach(label => {
+        const cell = document.createElement('th');
+        cell.scope = 'col';
+        cell.textContent = label;
+        head.appendChild(cell);
     });
-
-    const traceIrrigation = {
-        x: dates,
-        y: recommendedIrrigation,
-        name: 'Recommended Irrigation (mm)',
-        type: 'bar',
-        marker: {
-            color: 'rgba(67, 160, 71, 0.7)',
-            line: {
-                color: 'rgba(67, 160, 71, 1)',
-                width: 1
-            }
+    const body = table.createTBody();
+    const maximum = Math.max(1, ...plan.days.map(day => day.amount_mm));
+    for (const day of plan.days) {
+        const row = body.insertRow();
+        for (const value of [day.date, day.rainfall_mm, day.amount_mm, day.water_liters]) {
+            row.insertCell().textContent = value;
         }
-    };
-
-    const traceRainfall = {
-        x: dates,
-        y: rainfall,
-        name: 'Forecast Rainfall (mm)',
-        type: 'bar',
-        marker: {
-            color: 'rgba(49, 130, 206, 0.7)',
-            line: {
-                color: 'rgba(49, 130, 206, 1)',
-                width: 1
-            }
-        }
-    };
-
-    const layout = {
-        barmode: 'group',
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
-        font: {
-            color: '#FFFFFF',
-            family: 'Inter, sans-serif'
-        },
-        margin: { t: 40, b: 40, l: 40, r: 20 },
-        legend: {
-            orientation: 'h',
-            y: 1.1
-        },
-        xaxis: {
-            gridcolor: 'rgba(255,255,255,0.1)',
-            zerolinecolor: 'rgba(255,255,255,0.2)'
-        },
-        yaxis: {
-            gridcolor: 'rgba(255,255,255,0.1)',
-            zerolinecolor: 'rgba(255,255,255,0.2)',
-            title: 'Millimeters (mm)'
-        }
-    };
-
-    const config = {
-        responsive: true,
-        displayModeBar: false
-    };
-
-    Plotly.newPlot(chartDiv, [traceRainfall, traceIrrigation], layout, config);
+        const bar = document.createElement('div');
+        bar.className = 'plan-bar';
+        bar.style.width = Math.max(0, day.amount_mm / maximum * 100) + '%';
+        bar.setAttribute('aria-hidden', 'true');
+        row.cells[2].appendChild(bar);
+    }
+    container.appendChild(table);
 };

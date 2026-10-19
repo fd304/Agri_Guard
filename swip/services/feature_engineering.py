@@ -4,8 +4,8 @@ class FeatureEngineering:
 
     def calculate_et0(self, temperature, humidity, wind_speed=2.0, solar_radiation=15.0):
         """
-        Simplified Hargreaves-Samani / Penman-Monteith estimation for ET0.
-        Real ET0 requires extensive data. This is an estimate based on available params.
+        Legacy temperature/humidity heuristic (mm/day), not Hargreaves-Samani
+        or FAO Penman-Monteith. Defaults for wind/radiation are assumptions.
         """
         # Simplistic approximation: higher temp = higher ET0, higher humidity = lower ET0
         # Base ET0 around 3-6 mm/day for typical summer days
@@ -22,9 +22,20 @@ class FeatureEngineering:
         deficit = et0 - effective_rainfall
         return max(0.0, round(deficit, 2))
 
-    def assess_heat_wave(self, current_temp, forecast_temps):
-        """ Check if there's a heatwave in the forecast. """
-        consecutive_hot_days = sum(1 for t in forecast_temps if t > 35)
-        return current_temp > 35 or consecutive_hot_days >= 3
+    def assess_heat_wave(self, forecast):
+        """Three consecutive dated daily maxima >35°C (legacy demo threshold)."""
+        from datetime import date, timedelta
+        streak, previous = 0, None
+        for day in sorted(forecast, key=lambda item: item['date']):
+            current = date.fromisoformat(day['date'])
+            if current == previous:
+                raise ValueError('Duplicate forecast date')
+            if previous is None or current != previous + timedelta(days=1):
+                streak = 0
+            streak = streak + 1 if day['max_temp'] > 35 else 0
+            if streak >= 3:
+                return True
+            previous = current
+        return False
 
 feature_engineering = FeatureEngineering()

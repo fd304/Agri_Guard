@@ -21,11 +21,11 @@ class SoilService:
         Returns a validated moisture value and its authoritative source label.
         """
         if moisture_source == 'sensor' and input_moisture is not None:
-            return {"value": input_moisture, "source": "Sensor measured"}
+            return {"value": input_moisture, "source": "User-reported sensor value (not independently verified)"}
         elif moisture_source == 'manual' and input_moisture is not None:
             return {"value": input_moisture, "source": "User entered"}
         else:
             est = self.estimate_soil_moisture(rainfall, temperature)
-            return {"value": est, "source": "Estimated from weather models"}
+            return {"value": est, "source": "Uncalibrated weather-based heuristic, not measured"}
 
 soil_service = SoilService()

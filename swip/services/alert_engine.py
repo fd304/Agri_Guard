@@ -5,12 +5,9 @@ class AlertEngine:
     def generate_alerts(self, decision_payload, forecast):
         alerts = []
         
-        # 1. System Status
-        alerts.append({
-            "type": "success",
-            "title": "System operating normally",
-            "desc": "All sensors and data streams are active."
-        })
+        if decision_payload['risk'].get('waterlogging', 0):
+            alerts.append({'type': 'danger', 'title': 'Possible waterlogging',
+                           'desc': 'Irrigation blocked by the demonstration moisture rule; verify field drainage.'})
         
         # 2. Risk Alerts
         risk = decision_payload["risk"]
@@ -26,7 +23,7 @@ class AlertEngine:
             alerts.append({
                 "type": "warning",
                 "title": "Drought Risk Alert",
-                "desc": "Prolonged low precipitation and high ET0 are contributing to a high drought index."
+                "desc": "The submitted daily temperature and rainfall trigger the heuristic dryness index; prolonged drought is not established."
             })
             
         if risk["flood"] > 70:
